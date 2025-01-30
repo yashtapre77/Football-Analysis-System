@@ -13,9 +13,12 @@ def main():
     # detections = tracker.detect_frames(frames)
     tracks = tracker.get_object_tracks(frames, read_from_stub=True, stub_path="stubs/track_stubs.pkl")
     print("Detections done successfully")
+    # print(tracks)
 
+    # Draw the annotations
+    output_frames = tracker.draw_annotations(frames, tracks)
     # Save the video
-    # save_video(frames, 'out_vid/train1.avi')
+    save_video(output_frames, 'out_vid/train1.avi')
 
 if __name__ == '__main__':
     main()

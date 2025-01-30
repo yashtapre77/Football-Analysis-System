@@ -4,3 +4,4 @@ out_vid/
 runs/
 stubs/
 __pycache__/
+*/__pycache__/
