@@ -8,6 +8,7 @@ def read_video(video_path):
         if not ret:
             break
         frames.append(frame)
+    print("Read video successfully")
     return frames
 
 

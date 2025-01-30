@@ -2,3 +2,5 @@ env/
 models/
 out_vid/
 runs/
+stubs/
+__pycache__/
