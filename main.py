@@ -1,6 +1,7 @@
 from utils import read_video, save_video
 from trackers import Tracker
 import cv2
+from team_assigner import TeamAssigner
 def main():
     # Read the video
     frames = read_video('inp_vid/train.mp4')
@@ -27,6 +28,21 @@ def main():
     #     cv2.imwrite(f"out_vid/cropped_img.jpg",cropped_image)
 
     #     break 
+
+    #Interpolate the ball positions
+    tracks["ball"] = tracker.interpolate_ball_positions(tracks["ball"])
+
+
+    #Assign player teams
+    team_assigner = TeamAssigner()
+    team_assigner.assign_team_color(frames[0], tracks["players"][0])
+
+    for frame_num , player_track in enumerate(tracks["players"]):
+        for player_id , track  in player_track.items():
+            team = team_assigner.get_player_team(frames[frame_num],track["bbox"],player_id)
+
+            tracks["players"][frame_num][player_id]["team"] = team
+            tracks["players"][frame_num][player_id]["team_color"] = team_assigner.team_colors[team]
 
     # Draw the annotations
     output_frames = tracker.draw_annotations(frames, tracks)
