@@ -1,9 +1,10 @@
+import cv2
+import numpy as np
 from utils import read_video, save_video
 from trackers import Tracker
-import cv2
 from team_assigner import TeamAssigner
 from player_ball_assigner import PlayerBallAssigner
-import numpy as np
+from camera_movement_estimator import CameraMovementEstimator
 
 def main():
     # Read the video
@@ -18,6 +19,11 @@ def main():
     tracks = tracker.get_object_tracks(frames, read_from_stub=True, stub_path="stubs/track_stubs.pkl")
     print("Detections done successfully")
     # print(tracks)
+
+    #Estimate the camera movement
+    camera_movement_estimator = CameraMovementEstimator(frames[0])
+    camera_movement_per_frame = camera_movement_estimator.get_camera_movement(frames, read_from_stub=True, stub_path="stubs/camera_movement_stubs.pkl") 
+
 
     # save cropped image of a player
     # for track_id , player in tracks["players"][0].items():
@@ -66,6 +72,9 @@ def main():
     # Draw the annotations
     output_frames = tracker.draw_annotations(frames, tracks, team_ball_control)
     print("Annotations drawn successfully")
+
+    #Draw camera movementS
+    output_frames = camera_movement_estimator.draw_camera_movement(output_frames, camera_movement_per_frame)
 
     # Save the video
     save_video(output_frames, 'out_vid/train1.avi')
